@@ -27,6 +27,5 @@ dist-ssr
 
 
 
-.venv/
-instance/
-__pycache__/
+
+
