@@ -11,7 +11,7 @@ lemmatizer = WordNetLemmatizer()
 
 def preprocess_text(text):
     text = text.lower()
-    text = re.sub(r'[^a-zA-Z\s]', '', text)
+    text = re.sub(r'[^a-zA-Z0-9\s]', '', text)
     words = text.split()
     words = [w for w in words if w not in stop_words]
     words = [lemmatizer.lemmatize(w) for w in words]

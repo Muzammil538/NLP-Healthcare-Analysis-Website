@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class Config:
-    SECRET_KEY = "super-secret-key"
-    JWT_SECRET_KEY = "jwt-secret-key"
-    SQLALCHEMY_DATABASE_URI = "sqlite:///database.db"
+    SECRET_KEY = os.environ.get("SECRET_KEY", "default-secret-key")
+    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "default-jwt-secret-key")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("SQLALCHEMY_DATABASE_URI", "sqlite:///database.db")
     SQLALCHEMY_TRACK_MODIFICATIONS = False

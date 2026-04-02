@@ -10,6 +10,10 @@ auth_bp = Blueprint("auth", __name__)
 def register():
     data = request.json
 
+    existing_user = User.query.filter_by(email=data["email"]).first()
+    if existing_user:
+        return jsonify({"message": "Email already registered"}), 400
+
     hashed_pw = bcrypt.hashpw(
         data["password"].encode("utf-8"),
         bcrypt.gensalt()

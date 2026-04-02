@@ -20,9 +20,14 @@ print("Columns:", df.columns)
 # Drop missing values
 df = df.dropna(subset=["transcription", "medical_specialty"])
 
-# Keep top 10 most frequent specialties (better accuracy)
-top_specialties = df["medical_specialty"].value_counts().head(10).index
-df = df[df["medical_specialty"].isin(top_specialties)]
+# Keep top 20 most frequent specialties (better representation)
+top_specialties_df = df["medical_specialty"].value_counts().head(20).index.tolist()
+
+# Ensure Endocrinology is present for diabetes queries
+if ' Endocrinology' not in top_specialties_df:
+    top_specialties_df.append(' Endocrinology')
+
+df = df[df["medical_specialty"].isin(top_specialties_df)]
 
 print("Using specialties:", df["medical_specialty"].unique())
 
@@ -51,8 +56,8 @@ vectorizer = TfidfVectorizer(max_features=5000)
 X_train_vec = vectorizer.fit_transform(X_train)
 X_test_vec = vectorizer.transform(X_test)
 
-# Logistic Regression Model
-model = LogisticRegression(max_iter=1000)
+# Logistic Regression Model with balanced class weights to improve confidence
+model = LogisticRegression(max_iter=1000, class_weight='balanced', C=2.0)
 model.fit(X_train_vec, y_train)
 
 # Evaluation
