@@ -14,14 +14,62 @@ model = joblib.load("model.pkl")
 vectorizer = joblib.load("vectorizer.pkl")
 nlp = spacy.load("en_core_web_sm")
 
-# Add Entity Ruler to detect specific clinical terms
+# Add Entity Ruler to detect specific clinical terms (case-insensitive)
 if not nlp.has_pipe("entity_ruler"):
     ruler = nlp.add_pipe("entity_ruler", before="ner")
     patterns = [
+        # Symptoms
         {"label": "SYMPTOM", "pattern": [{"LOWER": "chest"}, {"LOWER": "pain"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "shortness"}, {"LOWER": "of"}, {"LOWER": "breath"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "dyspnea"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "fever"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "cough"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "headache"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "dizziness"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "nausea"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "fatigue"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "palpitations"}]},
+        {"label": "SYMPTOM", "pattern": [{"LOWER": "tremor"}]},
+        
+        # Tests & Measurements
         {"label": "TEST", "pattern": [{"LOWER": "hba1c"}]},
-        {"label": "CONDITION", "pattern": [{"LOWER": "diabetes"}]},
         {"label": "TEST", "pattern": [{"LOWER": "blood"}, {"LOWER": "pressure"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "ecg"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "ekg"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "mri"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "ct"}, {"LOWER": "scan"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "ultrasound"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "xray"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "x"}, {"LOWER": "ray"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "glucose"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "troponin"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "eeg"}]},
+        {"label": "TEST", "pattern": [{"LOWER": "thyroid"}, {"LOWER": "function"}]},
+        
+        # Conditions
+        {"label": "CONDITION", "pattern": [{"LOWER": "diabetes"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "stroke"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "seizure"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "hypertension"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "heart"}, {"LOWER": "attack"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "myocardial"}, {"LOWER": "infarction"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "pneumonia"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "asthma"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "copd"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "depression"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "anxiety"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "arthritis"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "cancer"}]},
+        {"label": "CONDITION", "pattern": [{"LOWER": "arrhythmia"}]},
+        
+        # Medications
+        {"label": "MEDICATION", "pattern": [{"LOWER": "aspirin"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "metformin"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "insulin"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "lisinopril"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "atorvastatin"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "warfarin"}]},
+        {"label": "MEDICATION", "pattern": [{"LOWER": "amoxicillin"}]},
     ]
     ruler.add_patterns(patterns)
 

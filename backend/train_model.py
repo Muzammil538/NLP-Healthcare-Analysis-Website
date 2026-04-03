@@ -20,8 +20,8 @@ print("Columns:", df.columns)
 # Drop missing values
 df = df.dropna(subset=["transcription", "medical_specialty"])
 
-# Keep top 20 most frequent specialties (better representation)
-top_specialties_df = df["medical_specialty"].value_counts().head(20).index.tolist()
+# Keep top 10 most frequent specialties (better representation and higher confidence)
+top_specialties_df = df["medical_specialty"].value_counts().head(10).index.tolist()
 
 # Ensure Endocrinology is present for diabetes queries
 if ' Endocrinology' not in top_specialties_df:
@@ -51,8 +51,8 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-# TF-IDF Vectorization
-vectorizer = TfidfVectorizer(max_features=5000)
+# TF-IDF Vectorization with improved settings
+vectorizer = TfidfVectorizer(max_features=15000, ngram_range=(1, 2))
 X_train_vec = vectorizer.fit_transform(X_train)
 X_test_vec = vectorizer.transform(X_test)
 
